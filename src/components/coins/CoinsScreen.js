@@ -22,15 +22,11 @@ class CoinsScreen extends Component {
     const coins = await Http.instance.get(
       'https://api.coinlore.net/api/tickers/',
     );
-
-    console.log(coins);
-
     this.setState({coins: coins.data, loading: false});
   };
 
-  handlePress = () => {
-    console.log('went to detail view', this.props);
-    this.props.navigation.navigate('CoinDetail');
+  handlePress = (coin) => {
+    this.props.navigation.navigate('CoinDetail', {coin});
   };
 
   render() {
@@ -47,12 +43,11 @@ class CoinsScreen extends Component {
         ) : null}
         <FlatList
           data={coins}
-          renderItem={({item}) => <CoinsItem item={item} />}
+          renderItem={({item}) => (
+            <CoinsItem item={item} onPress={() => this.handlePress(item)} />
+          )}
         />
         <Text>Coins Screen</Text>
-        <Pressable onPress={this.handlePress} style={styles.btn}>
-          <Text>Ir a detail</Text>
-        </Pressable>
       </View>
     );
   }
